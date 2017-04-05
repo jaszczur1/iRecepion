@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+  body
+      div#calendar
+      
+        script(type='text/javascript' src='jquery/dist/jquery.min.js')        
+        link(rel='stylesheet' href='fullcalendar/dist/fullcalendar.css')
+        link(rel='stylesheet' href='fullcalendar-scheduler/dist/scheduler.css')
+        script(type='text/javascript' src='moment/moment.js')
+        script(type='text/javascript' src='jquery/dist/jquery.js')
+        script(type='text/javascript' src='fullcalendar/dist/fullcalendar.js')
+        script(type='text/javascript' src='fullcalendar-scheduler/dist/scheduler.js')
+        script(type='text/javascript' src='javascripts/calendar.js')
+        link(rel='stylesheet' href='bootstrap/dist/css/bootstrap.min.css')
+        script(type='text/javascript' src='bootstrap/dist/js/bootstrap.min.js')
+        script(type="text/javascript", src="addLibary/bootstrap-notify/bootstrap-notify.js", )
+        script(type="text/javascript", src="addLibary/bootstrap-notify/bootstrap-notify.min.js")
+        link(href="addLibary/animate.css/animate.css" rel="stylesheet")
+        link(href='stylesheets/calendarStyle.css', rel="stylesheet")    
+
+        script.
+             setInterval(function (){$.ajax({url:'/getToken'})}, 10000);
+    
