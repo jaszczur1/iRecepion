@@ -1,7 +1,8 @@
 var credentials = {
   client: {
-    id: 'f88e61f1-80bc-46aa-b8d2-861b9496a126',
-    secret: '4khwjotrh8zk5MTAQ2FXYbC',
+    id: 'abf6b137-64ce-4e62-82fb-3c07365742d0',
+    secret: 'fAgsex1P99rRZKrJt6MpBsW',
+   
   },
   auth: {
     tokenHost: 'https://login.microsoftonline.com',

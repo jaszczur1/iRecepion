@@ -3,109 +3,96 @@ var authHelper = require('../authHelper');
 
 var express = require('express');
 var router = express.Router();
+outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
 
 var expiration;
 var refresh_token;
 var token;
-var token_expires;
-var mail;
-
-
 var bool = true;
+var token_refreh_pom;
 
 /* GET home page. */
 router.get('/', function (request, response, next) {
-
+    
+      //pobieranie z ciasteczka
+        if (bool) {
+            token = request.cookies.token;
+            expiration = new Date(parseFloat(request.cookies.token_expires));
+            refresh_token = request.cookies.refresh_token;
+            console.log("Get request all cookies :" + request.headers.cookie);
+            bool = false;
+            console.log("work with this mail: " + request.cookies.email);
+    }
+    
     console.log('Request handler \'mail\' was called.');
-    console.log("work with this mail: " + request.cookies.email);
+    getAccessToken(request, response, function (error, refershTokenPom) {
 
-    token = request.cookies.token;
-    console.log("get first token form authorize page " + token);
-
-    outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
-
-    getAccessToken(request, response, function (cookiesArrray, newAccessToken) {
-
-        token = getValueFromCookie("token", cookiesArrray.toString());
-        refresh_token = getValueFromCookie("refresh_token", cookiesArrray.toString());
-        token_expires = getValueFromCookie("token_expires", cookiesArrray.toString())
-        console.log("new refersh " + token_expires);
-        expiration = token_expires;
-
-//        console.log(getValueFromCookie("refresh_token", cookiesArrray.toString()));   
-//        response.cookie('refresh_token',getValueFromCookie("refresh_token", cookiesArrray.toString()));
-//        response.cookie('token_expires', getValueFromCookie("token_expires", cookiesArrray.toString()));
-//        console.log("token expiries "+request.cookies.token_expires);
-
-        //   sendMail(token);
-        console.log("token  po reresh'u");
+        if (error) {
+            console.log("bład tokena do obsłuzenia");
+            console.log('przeładuj storne');
+            refresh_token = refershTokenPom;
+            return;
+        }
     });
 
-
     function getAccessToken(request, response, callback) {
+        
+        console.log("czaswygasniecia : "+ expiration); 
+        console.log("aktualny czas : "+ new Date());
 
-        if (bool) {
-            expiration = new Date(parseFloat(request.cookies.token_expires));
-            bool = false;
-            mail = request.cookies.mail;
-        }
-
-        console.log("Get request all cookies :" + request.headers.cookie);
-        console.log("check cookies " + expiration + " " + new Date());
-
-        if (expiration <= new Date()) {
-            // refresh token
-
+        // refresh token
+        if ( expiration <= new Date() ) {
             console.log('TOKEN EXPIRED, REFRESHING');
-            refresh_token = request.cookies.refresh_token;
-
             authHelper.refreshAccessToken(refresh_token, function (error, newToken) {
 
+                console.log(newToken);
+                
                 if (error) {
-                    
-                    response.send(error);
-                    
-                    callback(error, null);
+                    res.redirect('http://localhost:8000');
+                    console.log('bład nowego tokena: ' + error);
+                    callback(error, token_refreh_pom );
+                    return;
                 } else if (newToken) {
-                    cookies = ['token=' + newToken.token.access_token,
-                        'refresh_token=' + newToken.token.refresh_token,
-                        'token_expires=' + newToken.token.expires_at.getTime()];
 
-                    callback(cookies, newToken.token.access_token);
-                }
+                    if (token !== newToken.token.access_token) {
+                        console.log("nowy glowny token");
+                    }
+                    if (refresh_token !== newToken.token.refresh_token) {
+                        console.log("nowy refresh token");
+                    }
+                    token = newToken.token.access_token;
+                    expiration = newToken.token.expires_at;
+                    expiration = new Date(expiration);
+                    console.log(expiration);
+                    
+                    
+                  //  expiration = new Date(parseFloat(token_expires));
+                    // callback(null, newToken.token.access_token);
+                    token_refreh_pom = newToken.token.refresh_token;
+                    
+//                    // po wygasnieciu lock wykonuje sie raz
+//                    if (refersh_RefreshToken === true) {
+//                        refresh_token = newToken.token.refresh_token;
+//                     //   refresh_token = newToken.token.refresh_token;
+//                        //('token wygasł');
+//                       refersh_RefreshToken = false;
+//                    }
+                }  
             })
-        } else {       
+        } else {
             console.log("bez odswierzania token'a");
         }
     }
     next();
-}
-        );
-
-var start;
-var end;
-
-function getValueFromCookie(valueName, cookie) {
-    if (cookie.indexOf(valueName) !== -1) {
-        start = cookie.indexOf(valueName) + valueName.length + 1;
-        end = cookie.indexOf(';', start);
-        end = end === -1 ? cookie.length : end;
-        return cookie.substring(start, end);
-    }
-}
-var host;
-var message;
-var titleEventObiect;
+});
 
 router.get('/mail', function (request, response, next) {
 
-    host = request.param('host');
-    message = request.param('message');
-    titleEventObiect = request.param('titleEventObiect');
+    var host = request.param('host');
+    var message = request.param('message');
+    var titleEventObiect = request.param('titleEventObiect');
 
-
-console.log(host+" "+ message +" "+ titleEventObiect);
-    console.log(titleEventObiect);
+    console.log('uzywam tego tokena' + token);
 
     var newMsg = {
         Subject: titleEventObiect,
@@ -125,8 +112,9 @@ console.log(host+" "+ message +" "+ titleEventObiect);
 
 // Pass the user's email address
     var userInfo = {
-        email: mail
+        email: 'APSC.iReception@advantech.com'
     };
+
 
     outlook.mail.sendNewMessage({token: token, message: newMsg, user: userInfo},
             function (error, result) {
@@ -137,8 +125,8 @@ console.log(host+" "+ message +" "+ titleEventObiect);
                     console.log(JSON.stringify(result, null, 2));
                 }
             });
-            next();
-            
+    next();
 }
 );
+
 module.exports = router;

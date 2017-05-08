@@ -11,15 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/routes/index.js</file>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/views/error.jade</file>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/routes/dataFromRemoteSql.js</file>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/routes/getToken.js</file>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/views/layout.jade</file>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/app.js</file>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/routes/authorize.js</file>
-            <file>file:/C:/Users/michal.jadczak/Desktop/fullCalendarOutlook/public/javascripts/calendar.js</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

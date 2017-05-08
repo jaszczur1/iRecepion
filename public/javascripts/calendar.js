@@ -7,6 +7,7 @@ auditorium = ["Orange ground floor",
     "Undefiled"];
 var color = [];
 color = ['orange', 'green', 'blue', 'pink', 'brown', 'blue'];
+
 function createCalnedar(minTime, maxTime) {
 
     $('#calendar').fullCalendar({
@@ -18,42 +19,45 @@ function createCalnedar(minTime, maxTime) {
         header: false, // ustawienia button
         header: {left: 'title', right: ''},
         firstDay: 1,
-        //    nowIndicator: true,
-
+     
         eventRender: function (event, eventElement) {
-
-            alert(moment(event.end));
 
             if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
 
-                
-                    eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-cutlery'></span></div></div>");
-                }
-               
-            
-            if (event.titleEventObiect == "Szkolenie") {
-                
-                if (moment(event.end) - moment(event.start) < 270000 || moment(event.end) - moment() < 270000) {
-                    alert('todo');
-                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-                }
-                
-                if (moment(event.end) - moment(event.start) > 2700000){
-                    eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-education'></span></div></div>");
-                    alert('to');    
-                }
-                
+                eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-cutlery'></span></div></div>");
             }
+
+            if (event.titleEventObiect == "Szkolenie") {
+
+
+                if (moment(event.end) - moment(event.start) < 2700000) {
+                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+                } else {
+
+                    if (moment(event.end) - moment() <= 1800000) {
+
+                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+                    } else {
+                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-education'></span></div></div>");
+                    }
+                }
+            }
+
 
             if (event.titleEventObiect == "Wizyta klienta") {
 
-
-                if (moment(event.end) - moment(event.start) > 2700000)
-                    eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
-
-                else if (moment(event.end) - moment(event.start) > 2700000 || moment(event.end) - moment() < 2700000) {
+                if (moment(event.end) - moment(event.start) < 2700000) {
 
                     eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+
+                } else {
+
+                    if (moment(event.end) - moment() <= 1800000) {
+                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+
+                    } else {
+                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
+                    }
                 }
 
             }
@@ -61,34 +65,34 @@ function createCalnedar(minTime, maxTime) {
 
             if (event.titleEventObiect == "Spotkanie") {
 
+                if (moment(event.end) - moment(event.start) < 2700000) {
 
-                if (moment(event.end) - moment(event.start) > 2700000)
-                    eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-blackboard'></span></div></div>");
-                else if (moment(event.end) - moment(event.start) > 2700000 || moment(event.end) - moment() < 2700000) {
+                    //  alert('maly element');
+                    eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
+                } else {
 
-                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+                    if (moment(event.end) - moment() <= 1800000) {
+                        eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
+                    } else {
+                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-blackboard'></span></div></div>");
+
+                    }
                 }
             }
         },
 
         eventClick: function (calEvent, jsEvent, view) {
 
-
-
-            //send mail
-            $.ajax({//typ połączenia na post
-                url: "/getToken/mail",
-
-                data: {
-                    host: calEvent.mail, // from event object           
-                    titleEventObiect: calEvent.titleEventObiect,
-                    message: calEvent.titleObiect
-                },
-                dataType: 'json',
-                success: function (data, textStatus, jqXHR) {
-                }
-            });
-
+                // request send mail
+                $.ajax({//typ połączenia na post
+                    url: "/getToken/mail",
+                    type: 'GET',
+                    data: {
+                        host: calEvent.mail, // from event object           
+                        titleEventObiect: calEvent.titleEventObiect,
+                        message: calEvent.titleObiect
+                    },
+                });           
 
             $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
                 animate: {
@@ -131,6 +135,9 @@ function formatDate(parm) {
 }
 function compareTime(givenTime) {
 
+       
+
+
     var m = moment();
     if (m < moment(givenTime))
         return true;
@@ -140,18 +147,20 @@ var renderEvents = function () {
 
     // get event from database
     $.ajax({
-        type: "POST", //typ połączenia na post
+        type: "GET", //typ połączenia na post
         url: "/dataFromRemoteSql",
         dataType: 'json', //ustawiamy typ danych na json
 
         success: function (json) {
+
+            deleteEvent();
 
             for (var i = 0; i < json.length; i++) {
 
                 if (compareTime(json[i].timeEventStop) === false) {
 
                     $.ajax({
-                        type: "POST", //typ połączenia na post
+                        type: "post", //typ połączenia na post
                         url: "/dataFromRemoteSql/statusEnd",
                         dataType: 'json',
                         data: {
@@ -159,8 +168,6 @@ var renderEvents = function () {
                         }
                     });
                 }
-
-
 
                 $('#calendar').fullCalendar('addEventSource', [{
                         resourceId: json[i].idRoom,
@@ -173,73 +180,69 @@ var renderEvents = function () {
 
                     }]);
             }
+
+            $('#calendar').fullCalendar('addEventSource', [{
+                    resourceId: 5,
+                    titleEventObiect: "Rajskie smaki",
+                    start: '9:30', // a start time (10am in this example)
+                    end: '10:00', // an end time (6pm in this example)
+                    dow: [1, 2, 3, 4, 5], // Repeat monday and friday
+                    mail: "Employee.APL@advantech.eu"
+                }]);
+            $('#calendar').fullCalendar('addEventSource', [{
+                    resourceId: 5,
+                    titleEventObiect: "Pan kanapka",
+                    start: '10:00', // a start time (10am in this example)
+                    end: '10:30', // an end time (6pm in this example)
+                    dow: [1, 2, 3, 4, 5], // Repeat monday and friday
+                    mail: "Employee.APL@advantech.eu"
+                }]);
         }
     });
-
-    $('#calendar').fullCalendar('addEventSource', [{
-            resourceId: 5,
-            titleEventObiect: "Rajskie smaki",
-            start: '9:30', // a start time (10am in this example)
-            end: '10:00', // an end time (6pm in this example)
-            dow: [1, 2, 3, 4, 5], // Repeat monday and friday
-            mail: "Employee.APL@advantech.eu"
-        }]);
-    $('#calendar').fullCalendar('addEventSource', [{
-            resourceId: 5,
-            titleEventObiect: "Pan kanapka",
-            start: '10:00', // a start time (10am in this example)
-            end: '10:30', // an end time (6pm in this example)
-            dow: [1, 2, 3, 4, 5], // Repeat monday and friday
-            mail: "Employee.APL@advantech.eu"
-        }]);
 }
 
 var deleteEvent = function () {
-
     $('#calendar').fullCalendar('removeEvents');
 }
 
-
 var functionToExecute = function () {
-    deleteEvent();
-    renderEvents();
+
+   // console.log(moment());
+    var start = moment('1900', 'h:mm');
+    var stop = moment('2355', 'h:mm');
+
+    $.ajax({
+        type: "get", //typ połączenia na get
+        url: "/getToken"
+    });
+    
+    // console.log("from web site " + start + " " + stop);
+    if (!moment().isBetween(start, stop))  renderEvents();
 
     date = new Date();
     console.log(date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
-    if (date.getHours() !== 0 && date.getMinutes() === 0 && date.getSeconds() < 4) {
+    if (date.getHours() !== 0 && date.getMinutes() === 0 && date.getSeconds() <= 5) {
 
-
-
-
+        if (date.getHours() === 6 && date.getMinutes() === 59 && date.getSeconds() <= 10)  location.reload();
+        
         $('#calendar').fullCalendar('destroy');
-        if (formatDate('check') > 7 && formatDate('check') < 20) {
+        if (formatDate('check') > 6 && formatDate('check') < 20) {
 
             createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
             var calHeight = $(window).height() * 0.606;
             $('#calendar').fullCalendar('option', 'height', calHeight);
         }
     }
-
-    if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() < 3) {
-
+    if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() <= 5) {
 
         // end end event 
         console.log('start function');
         $.ajax({
-            type: "POST", //typ połączenia na post
-            url: "/dataFromRemoteSql/statusEndEnd",
-
+            type: "GET", //typ połączenia na post
+            url: "/dataFromRemoteSql/statusEndEnd"
         });
-
-        setTimeout(function () {
-            location.reload();
-        }, 5000);
-
     }
-
 }
-
-
 
 // init calendar 
 createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
@@ -247,14 +250,14 @@ createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
 // init event
 renderEvents();
 
-setInterval(functionToExecute, 3000);
-
-// init token
+// init token 
 $.ajax({
-    type: 'GET',
-    url: '/getToken'
+
+    type: "get", //typ połączenia na post
+    url: "/getToken" 
 });
 
+setInterval(functionToExecute, 5000);
 
 $(window).resize(function () {
     var calHeight = $(window).height() * 0.606;
@@ -262,9 +265,3 @@ $(window).resize(function () {
 });
 var calHeight = $(window).height() * 0.606;
 $('#calendar').fullCalendar('option', 'height', calHeight);
-
-//       console.log($('#calendar').width());
-//       console.log($('#calendar').height());
-//       console.log($( window ).width());
-//       console.log($( window).height());
-

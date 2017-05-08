@@ -18,5 +18,11 @@
     "node-outlook": "^1.1.6",
     "serve-favicon": "~2.3.2",
     "simple-oauth2": "^1.1.0"
+  },
+  "devDependencies": {
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.6.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.1.0"
   }
 }

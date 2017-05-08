@@ -28,10 +28,10 @@ router.get('/', function (request, response) {
                     response.write('<p>ERROR: ' + error + '</p>');
                     response.end();
                 } else if (email) {
-                    var cookies = ['token=' + token.token.access_token,
-                        'refresh_token=' + token.token.refresh_token,
-                        'token_expires=' + token.token.expires_at.getTime(),
-                        'email=' + email + ';'];
+                    var cookies = ['token=' + token.token.access_token+ ';Max-Age=4000',
+                        'refresh_token=' + token.token.refresh_token+ ';Max-Age=4000',
+                        'token_expires=' + token.token.expires_at.getTime()+ ';Max-Age=4000',
+                        'email=' + email + ';Max-Age=4000;'];
                     response.setHeader('Set-Cookie', cookies);
                     response.writeHead(302, {'Location': 'http://localhost:8000/calendar'});
                     response.end();       

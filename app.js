@@ -32,7 +32,6 @@ var dataFromRemoteSql = require('./routes/dataFromRemoteSql');
 app.use('/', index);
 app.use('/authorize', authorize);
 app.use('/getToken', getToken);
-app.use('/getToken/mail', getToken);
 app.use('/calendar', calendar);
 app.use('/dataFromRemoteSql', dataFromRemoteSql);
 
