@@ -75,9 +75,9 @@ next();
 
 });
 
-router.get('/statusEndEnd', function (request, response, next) {
+router.post('/statusEndEnd', function (request, response, next) {
 
-    pool.query("SET SQL_SAFE_UPDATES=0;UPDATE event SET status='endend' where status ='end'");
+    pool.query("UPDATE event SET status='endend' where status ='end'");
 
 next(); 
 });

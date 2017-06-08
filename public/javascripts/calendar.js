@@ -19,7 +19,7 @@ function createCalnedar(minTime, maxTime) {
         header: false, // ustawienia button
         header: {left: 'title', right: ''},
         firstDay: 1,
-     
+
         eventRender: function (event, eventElement) {
 
             if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
@@ -83,31 +83,32 @@ function createCalnedar(minTime, maxTime) {
 
         eventClick: function (calEvent, jsEvent, view) {
 
-                // request send mail
-                $.ajax({//typ połączenia na post
-                    url: "/getToken/mail",
-                    type: 'GET',
-                    data: {
-                        host: calEvent.mail, // from event object           
-                        titleEventObiect: calEvent.titleEventObiect,
-                        message: calEvent.titleObiect
-                    },
-                });           
-
-            $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
-                animate: {
-                    enter: 'animated bounceInDown',
-                    exit: 'animated bounceOutUp'
+            // request send mail
+            $.ajax({//typ połączenia na post
+                url: "/getToken/mail",
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    host: calEvent.mail, // from event object           
+                    titleEventObiect: calEvent.titleEventObiect,
+                    message: calEvent.titleObiect
                 },
-                offset: {
-                    x: 600,
-                    y: 400
-
-                },
+               
             });
 
-            $(this).css('background-color', 'red');
-            $(this).css('border-color', 'red');
+ $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
+                            animate: {
+                                enter: 'animated bounceInDown',
+                                exit: 'animated bounceOutUp'
+                            },
+                            offset: {
+                                x: 600,
+                                y: 400
+
+                            },
+                        });
+
+
         },
         resources: [
             {id: '1', title: 'Orange ground floor', eventColor: 'orange'},
@@ -134,9 +135,6 @@ function formatDate(parm) {
 
 }
 function compareTime(givenTime) {
-
-       
-
 
     var m = moment();
     if (m < moment(givenTime))
@@ -207,24 +205,30 @@ var deleteEvent = function () {
 
 var functionToExecute = function () {
 
-   // console.log(moment());
-    var start = moment('1900', 'h:mm');
+    // console.log(moment());
+    var start = moment('1930', 'h:mm');
     var stop = moment('2355', 'h:mm');
 
     $.ajax({
         type: "get", //typ połączenia na get
-        url: "/getToken"
+        url: "/getToken",
+        dataType: 'json',
+        success: function (data, textStatus, jqXHR) {
+            alert(date);
+        }
     });
-    
+
     // console.log("from web site " + start + " " + stop);
-    if (!moment().isBetween(start, stop))  renderEvents();
+    if (!moment().isBetween(start, stop))
+        renderEvents();
 
     date = new Date();
     console.log(date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
     if (date.getHours() !== 0 && date.getMinutes() === 0 && date.getSeconds() <= 5) {
 
-        if (date.getHours() === 6 && date.getMinutes() === 59 && date.getSeconds() <= 10)  location.reload();
-        
+        if (date.getHours() === 6 && date.getMinutes() === 59 && date.getSeconds() <= 10)
+            location.reload();
+
         $('#calendar').fullCalendar('destroy');
         if (formatDate('check') > 6 && formatDate('check') < 20) {
 
@@ -238,7 +242,7 @@ var functionToExecute = function () {
         // end end event 
         console.log('start function');
         $.ajax({
-            type: "GET", //typ połączenia na post
+            type: "POST", //typ połączenia na post
             url: "/dataFromRemoteSql/statusEndEnd"
         });
     }
@@ -254,7 +258,7 @@ renderEvents();
 $.ajax({
 
     type: "get", //typ połączenia na post
-    url: "/getToken" 
+    url: "/getToken"
 });
 
 setInterval(functionToExecute, 5000);
