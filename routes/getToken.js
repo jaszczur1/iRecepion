@@ -19,9 +19,16 @@ var amoutErrors = 0;
 
 router.get('/', function (request, response, next) {
 
-    if (Verror !== "ok")
-        response.json({"blad_strony": "podczas pracy wystapił błąd sieci brak sieci"});
+    if (Verror !== "ok") {
+        //    response.send("podczas pracy wystapił błąd sieci lub brak sieci");
 
+        var json = JSON.stringify({
+            "message": "podczas pracy wystapił błąd sieci lub brak sieci"
+        });
+        response.send(json);
+       // amoutErrors = 0;
+
+    }
     //pobieranie z ciasteczka
     if (bool) {
         token = request.cookies.token;
@@ -30,30 +37,29 @@ router.get('/', function (request, response, next) {
         console.log("Get request all cookies :" + request.headers.cookie);
         bool = false;
         console.log("work with this mail: " + request.cookies.email);
+        
+        // jesli wystąpi błąd
+        token_refreh_pom = refresh_token;
     }
 
     console.log('Request handler \'mail\' was called.');
     // response.json({"blad_strony":"przeladuj strone"});
 
-
     getAccessToken(request, response, function (error, refershTokenPom) {
 
         if (error) {
             console.log("bład tokena do obsłuzenia");
-            console.log('przeładuj storne');
             refresh_token = refershTokenPom;   /// tu trzeba poprawić
-            return;
         }
     });
 
     function getAccessToken(request, response, callback) {
 
-
         console.log("czaswygasniecia : " + expiration);
         console.log("aktualny czas : " + new Date());
-
+        
         // refresh token
-        if ( expiration <= new Date() ) {
+        if (expiration <= new Date()) {
             console.log('TOKEN EXPIRED, REFRESHING');
             authHelper.refreshAccessToken(refresh_token, function (error, newToken) {
 
@@ -63,18 +69,19 @@ router.get('/', function (request, response, next) {
                     // ile błędów
                     amoutErrors++;
                     console.log(amoutErrors);
-                    
 
-                    if (amoutErrors >= 50) {
+
+                    if (amoutErrors > 50) {
                         Verror = error;
-                        return;
                     }
+                    
                     console.log('bład nowego tokena: ' + error);
                     callback(error, token_refreh_pom);
-                  
+
                 } else if (newToken) {
                     Verror = "ok";
-
+                    amoutErrors = 0;
+                    
                     if (token !== newToken.token.access_token) {
                         console.log("nowy glowny token");
                     }
@@ -86,27 +93,16 @@ router.get('/', function (request, response, next) {
                     expiration = new Date(expiration);
                     console.log(expiration);
 
-
-                    //  expiration = new Date(parseFloat(token_expires));
-                    // callback(null, newToken.token.access_token);
+                    // jesli czas sie skończy to użyj tego
                     token_refreh_pom = newToken.token.refresh_token;
-
-//                    // po wygasnieciu lock wykonuje sie raz
-//                    if (refersh_RefreshToken === true) {
-//                        refresh_token = newToken.token.refresh_token;
-//                     //   refresh_token = newToken.token.refresh_token;
-//                        //('token wygasł');
-//                       refersh_RefreshToken = false;
-//                    }
+                    
                 }
             })
         } else {
             console.log("bez odswierzania token");
-
         }
     }
-
-    next();
+    response.end();
 
 });
 
@@ -144,15 +140,19 @@ router.get('/mail', function (request, response, next) {
                 if (error) {
                     console.log('sendNewMessage returned an error: ' + error);
                     Verror = error;
-                    // response.json({"blad_strony":"przeladuj_strone"+error});
-
+                    var json = JSON.stringify({
+                        "message_notSend": "mail nie wyslany"
+                    });
+                    response.send(json);
+                   
                 } else if (result) {
                     console.log(JSON.stringify(result, null, 2));
-                 //   response.json({"blad_strony": "mailSend"});
+                    //  response.json({"blad_strony": "mailSend"});
                     Verror = "ok";
                 }
+                 response.end();      
             });
-    next();
+    
 }
 );
 

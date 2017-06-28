@@ -1,3 +1,7 @@
+// do obsługi błedów
+
+ var  message_data = "";
+
 var auditorium = [];
 auditorium = ["Orange ground floor",
     "Green 1st floor",
@@ -96,6 +100,19 @@ function createCalnedar(minTime, maxTime) {
                
             });
 
+               message_data = "";
+
+ $.ajax({
+        type: "get", //typ połączenia na get
+        url: "/getToken",
+        dataType: 'json',
+        success: function (data, textStatus, jqXHR) {
+            message_data = data["message"]
+            alert(message_data);
+        }
+    });
+
+                if( message_data === "")
  $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
                             animate: {
                                 enter: 'animated bounceInDown',
@@ -206,7 +223,7 @@ var deleteEvent = function () {
 var functionToExecute = function () {
 
     // console.log(moment());
-    var start = moment('1930', 'h:mm');
+    var start = moment('2030', 'h:mm');
     var stop = moment('2355', 'h:mm');
 
     $.ajax({
@@ -214,7 +231,7 @@ var functionToExecute = function () {
         url: "/getToken",
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
-            alert(date);
+           alert(data["message"]);
         }
     });
 

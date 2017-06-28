@@ -12,7 +12,9 @@ router.get('/', function (request, response, next) {
 //    
     response.render('calendar');
     
-  //next();
+        response.end();
+    
+// next();
     
 });
 

@@ -59,9 +59,15 @@ router.get('/', function (request, response, next) {
     pool.query("SELECT * FROM event, ff_email, room WHERE ff_email.id = event.idUser and event.status != 'end' and event.status != 'endend' and room.idRoom = event.idRoom", function (err, rows, fields) {
         if (!err) {
             response.send(rows);
-        } else
+            response.end();
+            
+        } else{
             console.log('Error while performing Query.');
-    });
+        response.end();
+        }
+        });
+    
+
 
 });
 
@@ -71,15 +77,14 @@ router.post('/statusEnd', function (request, response, next) {
     var event = request.body.idEvent;
 
     pool.query("UPDATE event SET status='end' where idEvent=" + event);
-next();
+response.end();
 
 });
 
 router.post('/statusEndEnd', function (request, response, next) {
 
     pool.query("UPDATE event SET status='endend' where status ='end'");
-
-next(); 
+response.end();
 });
 
 module.exports = router;
