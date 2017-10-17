@@ -26,7 +26,7 @@ router.get('/', function (request, response, next) {
             "message": "podczas pracy wystapił błąd sieci lub brak sieci"
         });
         response.send(json);
-       // amoutErrors = 0;
+        // amoutErrors = 0;
 
     }
     //pobieranie z ciasteczka
@@ -37,7 +37,7 @@ router.get('/', function (request, response, next) {
         console.log("Get request all cookies :" + request.headers.cookie);
         bool = false;
         console.log("work with this mail: " + request.cookies.email);
-        
+
         // jesli wystąpi błąd
         token_refreh_pom = refresh_token;
     }
@@ -57,7 +57,7 @@ router.get('/', function (request, response, next) {
 
         console.log("czaswygasniecia : " + expiration);
         console.log("aktualny czas : " + new Date());
-        
+
         // refresh token
         if (expiration <= new Date()) {
             console.log('TOKEN EXPIRED, REFRESHING');
@@ -74,14 +74,14 @@ router.get('/', function (request, response, next) {
                     if (amoutErrors > 50) {
                         Verror = error;
                     }
-                    
+
                     console.log('bład nowego tokena: ' + error);
                     callback(error, token_refreh_pom);
 
                 } else if (newToken) {
                     Verror = "ok";
                     amoutErrors = 0;
-                    
+
                     if (token !== newToken.token.access_token) {
                         console.log("nowy glowny token");
                     }
@@ -95,7 +95,7 @@ router.get('/', function (request, response, next) {
 
                     // jesli czas sie skończy to użyj tego
                     token_refreh_pom = newToken.token.refresh_token;
-                    
+
                 }
             })
         } else {
@@ -144,16 +144,47 @@ router.get('/mail', function (request, response, next) {
                         "message_notSend": "mail nie wyslany"
                     });
                     response.send(json);
-                   
+
                 } else if (result) {
                     console.log(JSON.stringify(result, null, 2));
                     //  response.json({"blad_strony": "mailSend"});
                     Verror = "ok";
                 }
-                 response.end();      
+                response.end();
             });
-    
+
+
+
 }
 );
+router.get('/getCalendarFromEvent', function (request, response, next) {
+
+    var queryParams = {
+        '$select': 'Subject,Start,End',
+        '$orderby': 'Start/DateTime desc',
+        '$top': 20
+    };
+    // Pass the user's email address
+    var userInfo = {
+        email: 'APSC.iReception@advantech.com'
+    };
+
+    outlook.calendar.getEvents({token: token, folderId: 'Inbox', odataParams: queryParams, user: userInfo},
+            function (error, result) {
+                if (error) {
+                    console.log('getEvents returned an error: ' + error);
+                } else if (result) {
+                    console.log('getEvents returned ' + result.value.length + ' events.');
+                    result.value.forEach(function (event) {
+                        console.log('  Subject:', event.Subject);
+                        console.log('  Start:', event.Start.DateTime.toString());
+                        console.log('  End:', event.End.DateTime.toString());
+                    });
+                }
+            });
+});
+
+//https://github.com/jasonjoh/node-outlook/blob/master/reference/node-outlook.md
+
 
 module.exports = router;

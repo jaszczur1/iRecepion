@@ -1,6 +1,4 @@
-// do obsługi błedów
-
- var  message_data = "";
+var  message_data = "";
 
 var auditorium = [];
 auditorium = ["Orange ground floor",
@@ -234,6 +232,17 @@ var functionToExecute = function () {
            alert(data["message"]);
         }
     });
+    
+      $.ajax({
+        type: "get", //typ połączenia na get
+        url: "/getToken/getCalendarFromEvent",
+        dataType: 'json',
+        success: function (data, textStatus, jqXHR) {
+           alert(data["message"]);
+        }
+    });
+    
+    
 
     // console.log("from web site " + start + " " + stop);
     if (!moment().isBetween(start, stop))

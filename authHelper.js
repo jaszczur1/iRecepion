@@ -18,7 +18,7 @@ var redirectUri = 'http://localhost:8000/authorize';
 var scopes = [ 'openid',
                'offline_access',
                'https://outlook.office.com/mail.read',
-               'https://outlook.office.com/calendars.read',
+               'https://outlook.office.com/calendars.Read',
                 'https://outlook.office.com/mail.send',];
 
 function getAuthUrl() {
