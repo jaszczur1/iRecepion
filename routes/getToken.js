@@ -1,9 +1,11 @@
 var outlook = require('node-outlook');
 var authHelper = require('../authHelper');
+outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
+
+var getActualTime = require('../node_modules/moment'); //lib for format time
 
 var express = require('express');
 var router = express.Router();
-outlook.base.setApiEndpoint('https://outlook.office.com/api/v2.0');
 
 var expiration;
 var refresh_token;
@@ -152,39 +154,64 @@ router.get('/mail', function (request, response, next) {
                 }
                 response.end();
             });
-
-
-
 }
 );
 router.get('/getCalendarFromEvent', function (request, response, next) {
 
-    var queryParams = {
-        '$select': 'Subject,Start,End',
-        '$orderby': 'Start/DateTime desc',
-        '$top': 20
-    };
-    // Pass the user's email address
     var userInfo = {
         email: 'APSC.iReception@advantech.com'
     };
 
-    outlook.calendar.getEvents({token: token, folderId: 'Inbox', odataParams: queryParams, user: userInfo},
-            function (error, result) {
-                if (error) {
-                    console.log('getEvents returned an error: ' + error);
-                } else if (result) {
-                    console.log('getEvents returned ' + result.value.length + ' events.');
-                    result.value.forEach(function (event) {
-                        console.log('  Subject:', event.Subject);
-                        console.log('  Start:', event.Start.DateTime.toString());
-                        console.log('  End:', event.End.DateTime.toString());
-                    });
-                }
-            });
+    console.log(" mój czas :" + getActualTime().format("YYYY-M-D"));
+    var startDateTime = getActualTime().format("YYYY-M-D");
+    var endDateTime = getActualTime().format("YYYY-M-D");
+    
+    var apiOptions = {
+        token: token,
+        // If none specified, the Primary calendar will be used
+        user: userInfo,
+        startDatetime: startDateTime,
+        endDatetime: endDateTime
+    };
+
+    outlook.calendar.syncEvents(apiOptions, function (error, events) {
+        if (error) {
+            console.log('syncEvents returned an error:', error);
+        } else {
+
+            try {
+                response.json(events);
+            console.log(events.value[0].Start);
+            console.log(events.value[0].End);
+            console.log(events.value[0].Location);
+//            console.log(events.value[0].End);
+//            console.log(events.value[0].Organizer);
+//            
+//            console.log('/////////////////////////////////////////////////////');
+
+            } catch (e) {
+                console.log("brak zdarzen w kalenarzu " + e)
+            }
+
+            // Do something with the events.value array
+            // Then get the @odata.deltaLink
+            //  var delta = messages['@odata.deltaLink'];
+
+            // Handle deltaLink value appropriately:
+            // In general, if the deltaLink has a $skiptoken, that means there are more
+            // "pages" in the sync results, you should call syncEvents again, passing
+            // the $skiptoken value in the apiOptions.skipToken. If on the other hand,
+            // the deltaLink has a $deltatoken, that means the sync is complete, and you should
+            // store the $deltatoken value for future syncs.
+            //
+            // The one exception to this rule is on the intial sync (when you call with no skip or delta tokens).
+            // In this case you always get a $deltatoken back, even if there are more results. In this case, you should
+            // immediately call syncMessages again, passing the $deltatoken value in apiOptions.deltaToken.
+        }
+    });
 });
 
 //https://github.com/jasonjoh/node-outlook/blob/master/reference/node-outlook.md
-
+// instrukcja jest takze node_modules
 
 module.exports = router;
