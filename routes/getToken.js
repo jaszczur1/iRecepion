@@ -18,7 +18,6 @@ var Verror = "ok";
 //var VerrorBool = false;
 var amoutErrors = 0;
 
-
 router.get('/', function (request, response, next) {
 
     if (Verror !== "ok") {
@@ -27,11 +26,11 @@ router.get('/', function (request, response, next) {
         var json = JSON.stringify({
             "message": "podczas pracy wystapił błąd sieci lub brak sieci"
         });
-        response.send(json);
+        response.json(json);
         // amoutErrors = 0;
 
     }
-    //pobieranie z ciasteczka
+    //get cookies from page
     if (bool) {
         token = request.cookies.token;
         expiration = new Date(parseFloat(request.cookies.token_expires));
@@ -40,19 +39,24 @@ router.get('/', function (request, response, next) {
         bool = false;
         console.log("work with this mail: " + request.cookies.email);
 
-        // jesli wystąpi błąd
-        token_refreh_pom = refresh_token;
     }
 
     console.log('Request handler \'mail\' was called.');
-    // response.json({"blad_strony":"przeladuj strone"});
 
     getAccessToken(request, response, function (error, refershTokenPom) {
 
         if (error) {
+            // ile błędów
+            amoutErrors++;
+            console.log(amoutErrors);
+
+            if (amoutErrors > 50) {
+                Verror = error;
+            }
             console.log("bład tokena do obsłuzenia");
-            refresh_token = refershTokenPom;   /// tu trzeba poprawić
+            refresh_token = refershTokenPom;
         }
+
     });
 
     function getAccessToken(request, response, callback) {
@@ -65,22 +69,13 @@ router.get('/', function (request, response, next) {
             console.log('TOKEN EXPIRED, REFRESHING');
             authHelper.refreshAccessToken(refresh_token, function (error, newToken) {
 
-                console.log(newToken);
-
                 if (error) {
-                    // ile błędów
-                    amoutErrors++;
-                    console.log(amoutErrors);
-
-
-                    if (amoutErrors > 50) {
-                        Verror = error;
-                    }
-
                     console.log('bład nowego tokena: ' + error);
                     callback(error, token_refreh_pom);
 
                 } else if (newToken) {
+
+                    console.log(newToken);
                     Verror = "ok";
                     amoutErrors = 0;
 
@@ -97,15 +92,19 @@ router.get('/', function (request, response, next) {
 
                     // jesli czas sie skończy to użyj tego
                     token_refreh_pom = newToken.token.refresh_token;
-
                 }
             })
         } else {
             console.log("bez odswierzania token");
+          
         }
+         try {
+                 response.end();
+            } catch (e) {
+                
+            }
     }
-    response.end();
-
+   
 });
 
 router.get('/mail', function (request, response, next) {
@@ -143,16 +142,29 @@ router.get('/mail', function (request, response, next) {
                     console.log('sendNewMessage returned an error: ' + error);
                     Verror = error;
                     var json = JSON.stringify({
-                        "message_notSend": "mail nie wyslany"
+                        "message": "mail nie wyslany"
                     });
-                    response.send(json);
+
+                    try {
+                        response.json(json);
+
+                    } catch (e) {
+                        console.log("nie mozna wysłąc ajax " + e);
+                    }
 
                 } else if (result) {
                     console.log(JSON.stringify(result, null, 2));
-                    //  response.json({"blad_strony": "mailSend"});
+                    var json = JSON.stringify({
+                        "message": "mail  wyslany"
+                    });
                     Verror = "ok";
+                    try {
+                        response.json(json);
+
+                    } catch (e) {
+                        console.log("nie mozna wysłąc ajax " + e);
+                    }
                 }
-                response.end();
             });
 }
 );
@@ -162,9 +174,11 @@ router.get('/getCalendarFromEvent', function (request, response, next) {
         email: 'APSC.iReception@advantech.com'
     };
 
-    console.log(" mój czas :" + getActualTime().format("YYYY-M-D"));
     var startDateTime = getActualTime().format("YYYY-M-D");
-    var endDateTime = getActualTime().format("YYYY-M-D");
+    var endDateTime = getActualTime().add(1, 'day');
+    endDateTime = getActualTime(endDateTime).format("YYYY-M-D");
+    
+    console.log("get event for day "+ startDateTime+" -"+endDateTime );
     
     var apiOptions = {
         token: token,
@@ -181,11 +195,12 @@ router.get('/getCalendarFromEvent', function (request, response, next) {
 
             try {
                 response.json(events);
-            console.log(events.value[0].Start);
-            console.log(events.value[0].End);
-            console.log(events.value[0].Location);
+                console.log(events.value[0].Start);
+                console.log(events.value[0].End);
+                console.log(events.value[0].Location);
 //            console.log(events.value[0].End);
-//            console.log(events.value[0].Organizer);
+            console.log(events.value[0].Organizer.EmailAddress.Address);
+            console.log(events.value[0].Organizer.EmailAddress.Name);
 //            
 //            console.log('/////////////////////////////////////////////////////');
 

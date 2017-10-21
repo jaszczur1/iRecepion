@@ -1,4 +1,4 @@
-var  message_data = "";
+var message_data = "";
 
 var auditorium = [];
 auditorium = ["Orange ground floor",
@@ -95,33 +95,34 @@ function createCalnedar(minTime, maxTime) {
                     titleEventObiect: calEvent.titleEventObiect,
                     message: calEvent.titleObiect
                 },
-               
+                success: function (data, textStatus, jqXHR) {
+                    alert(data)
+                }
             });
 
-               message_data = "";
+            message_data = "";
 
- $.ajax({
-        type: "get", //typ połączenia na get
-        url: "/getToken",
-        dataType: 'json',
-        success: function (data, textStatus, jqXHR) {
-            message_data = data["message"]
-            alert(message_data);
-        }
-    });
+            $.ajax({
+                type: "get", //typ połączenia na get
+                url: "/getToken",
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    alert(data);
+                }
+            });
 
-                if( message_data === "")
- $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
-                            animate: {
-                                enter: 'animated bounceInDown',
-                                exit: 'animated bounceOutUp'
-                            },
-                            offset: {
-                                x: 600,
-                                y: 400
+            if (message_data === "")
+                $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
+                    animate: {
+                        enter: 'animated bounceInDown',
+                        exit: 'animated bounceOutUp'
+                    },
+                    offset: {
+                        x: 600,
+                        y: 400
 
-                            },
-                        });
+                    },
+                });
 
 
         },
@@ -169,7 +170,6 @@ var renderEvents = function () {
             deleteEvent();
 
             for (var i = 0; i < json.length; i++) {
-
                 if (compareTime(json[i].timeEventStop) === false) {
 
                     $.ajax({
@@ -202,6 +202,7 @@ var renderEvents = function () {
                     dow: [1, 2, 3, 4, 5], // Repeat monday and friday
                     mail: "Employee.APL@advantech.eu"
                 }]);
+
             $('#calendar').fullCalendar('addEventSource', [{
                     resourceId: 5,
                     titleEventObiect: "Pan kanapka",
@@ -210,8 +211,59 @@ var renderEvents = function () {
                     dow: [1, 2, 3, 4, 5], // Repeat monday and friday
                     mail: "Employee.APL@advantech.eu"
                 }]);
+
+            $('#calendar').fullCalendar('addEventSource', [{
+                    resourceId: 5,
+                    titleEventObiect: "Pan pobutka",
+                    start: '10:30', // a start time (10am in this example)
+                    end: '11:00', // an end time (6pm in this example)
+                    dow: [1, 2, 3, 4, 5], // Repeat monday and friday
+                    mail: "Employee.APL@advantech.eu"
+                }]);
+
         }
     });
+
+    $.ajax({
+        type: "GET", //typ połączenia na post
+        url: "/getToken/getCalendarFromEvent",
+        dataType: 'json', //ustawiamy typ danych na json
+
+        success: function (json) {
+
+            deleteEvent();
+//
+//                console.log(start);
+//                console.log(end);
+
+            resourceId = 0;
+
+            for (i = 0; i < json.value.length; i++) {
+                for (j = 0; j < auditorium.length; j++) {
+                    if (json.value[i].Location.DisplayName === auditorium[j]) {
+                        resourceId = j + 1;
+                        console.log(resourceId);
+                        console.log(json.value[i].Location.DisplayName);
+                        console.log(i + " " + j);
+
+                        start = moment.parseZone(json.value[i].Start.DateTime).local().format();
+                        start = moment().format(start).substring(11, 16);
+                        end = moment.parseZone(json.value[i].End.DateTime).local().format();
+                        end = moment().format(end).substring(11, 16);
+
+                        $('#calendar').fullCalendar('addEventSource', [{
+                                resourceId: resourceId,
+                                titleEventObiect: json.value[i],
+                                start: start, // a start time (10am in this example)
+                                end: end, // an end time (6pm in this example)
+                                // Repeat monday and friday
+
+                            }]);
+                        break;
+                    }
+                }
+            }
+        }});
 }
 
 var deleteEvent = function () {
@@ -220,33 +272,24 @@ var deleteEvent = function () {
 
 var functionToExecute = function () {
 
-    // console.log(moment());
-    var start = moment('2030', 'h:mm');
-    var stop = moment('2355', 'h:mm');
+//    // console.log(moment());
+//    var start = moment('2030', 'h:mm');
+//    var stop = moment('2355', 'h:mm');
 
     $.ajax({
         type: "get", //typ połączenia na get
         url: "/getToken",
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
-           alert(data["message"]);
+            console.log(data);
         }
     });
-    
-      $.ajax({
-        type: "get", //typ połączenia na get
-        url: "/getToken/getCalendarFromEvent",
-        dataType: 'json',
-        success: function (data, textStatus, jqXHR) {
-           alert(data["message"]);
-        }
-    });
-    
-    
+
 
     // console.log("from web site " + start + " " + stop);
-    if (!moment().isBetween(start, stop))
-        renderEvents();
+//    if (!moment().isBetween(start, stop))
+
+    renderEvents();
 
     date = new Date();
     console.log(date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
@@ -256,7 +299,7 @@ var functionToExecute = function () {
             location.reload();
 
         $('#calendar').fullCalendar('destroy');
-        if (formatDate('check') > 6 && formatDate('check') < 20) {
+        if (formatDate('check') > 0 && formatDate('check') < 20) {
 
             createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
             var calHeight = $(window).height() * 0.606;

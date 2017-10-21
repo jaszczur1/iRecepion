@@ -16,7 +16,7 @@
     "less-middleware": "~2.2.0",
     "morgan": "~1.7.0",
     "node-mysql": "^0.4.2",
-    "node-outlook": "^1.1.6",
+    "node-outlook": "^1.1.7",
     "serve-favicon": "~2.3.2",
     "simple-oauth2": "^1.1.0"
   },
