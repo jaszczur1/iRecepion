@@ -25,16 +25,19 @@ function createCalnedar(minTime, maxTime) {
 
             if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka" || event.titleEventObiect == "Pan pobutka") {
 
+                $(eventElement).css({'font-size':'17px'});
                 eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-cutlery'></span></div></div>");
             }
-
+            
+            else{
                  
             $(eventElement).css({'font-size':'25px', 'display': 'flex'});
 
 //            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
 
             eventElement.append("<div>" + event.titleEventObiect + "</div> <div style ='font-size :50px; position: realtive; margin-top :10px; margin-left: 10px'><span class='glyphicon glyphicon-user'></span></div>");
-                    
+                 
+            }
                                       
             
             
@@ -210,7 +213,21 @@ var renderEvents = function () {
 
                     }]);
             }
+        }
+        
+    });
+    
+    
+    
+    $.ajax({
+        type: "GET", //typ połączenia na post
+        url: "/getToken/getCalendarFromEvent",
+        dataType: 'json', //ustawiamy typ danych na json
 
+        success: function (json) {
+
+            deleteEvent();
+            
             $('#calendar').fullCalendar('addEventSource', [{
                     resourceId: 5,
                     titleEventObiect: "Rajskie smaki",
@@ -235,16 +252,8 @@ var renderEvents = function () {
                     dow: [1, 2, 3, 4, 5], // Repeat monday and friday
                     mail: "Employee.APL@advantech.eu"
                 }]);
-        }
-    });
-    $.ajax({
-        type: "GET", //typ połączenia na post
-        url: "/getToken/getCalendarFromEvent",
-        dataType: 'json', //ustawiamy typ danych na json
-
-        success: function (json) {
-
-            deleteEvent();
+            
+            
             resourceId = 0;
             for (i = 0; i < json.value.length; i++) {
                 for (j = 0; j < auditorium.length; j++) {
@@ -293,23 +302,16 @@ var functionToExecute = function () {
         success: function (data, textStatus, jqXHR) {
 
             if (chceck_connet_internet == false) {
-
-
                 $.notify("Sesja wygasła lub wystąpił błąd sieci. Skontaktuj sie z Krzysztofem Szczech", {
-
                     offset: {
                         x: 600,
                         y: 400
-
                     }, type: 'danger', delay: 0,
-
                 });
                 chceck_connet_internet = true;
             }
         }, error: function (jqXHR, textStatus, errorThrown) {
-
             chceck_connet_internet = false;
-
         }
     });
     // console.log("from web site " + start + " " + stop);
@@ -341,7 +343,11 @@ var functionToExecute = function () {
     }
 }
 
-// init calendar 
+// init app
+
+$(document).ready(function(){
+   
+    // init calendar 
 createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
 // init event
 renderEvents();
@@ -358,3 +364,7 @@ $(window).resize(function () {
 });
 var calHeight = $(window).height() * 0.606;
 $('#calendar').fullCalendar('option', 'height', calHeight);
+
+})
+
+
