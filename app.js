@@ -22,6 +22,7 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 
 app.use('/',express.static(path.join(__dirname, '/public/')));
 app.use('/',express.static(path.join(__dirname, '/node_modules/')));
+app.use('/',express.static(path.join(__dirname, '/public/aaLibary')));
 
 
 var index = require('./routes/index');

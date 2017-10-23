@@ -1,14 +1,11 @@
 var message_data = "";
-
 var auditorium = [];
 auditorium = ["Orange ground floor",
     "Green 1st floor",
     "Blue 2nd floor",
     "Logistics",
     "Reception",
-    "Undefiled"];
-var color = [];
-color = ['orange', 'green', 'blue', 'pink', 'brown', 'blue'];
+];
 
 function createCalnedar(minTime, maxTime) {
 
@@ -21,69 +18,80 @@ function createCalnedar(minTime, maxTime) {
         header: false, // ustawienia button
         header: {left: 'title', right: ''},
         firstDay: 1,
-
         eventRender: function (event, eventElement) {
+            
+       
 
-            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
+
+            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka" || event.titleEventObiect == "Pan pobutka") {
 
                 eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-cutlery'></span></div></div>");
             }
 
-            if (event.titleEventObiect == "Szkolenie") {
+                 
+            $(eventElement).css({'font-size':'25px', 'display': 'flex'});
 
+//            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
 
-                if (moment(event.end) - moment(event.start) < 2700000) {
-                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-                } else {
-
-                    if (moment(event.end) - moment() <= 1800000) {
-
-                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-                    } else {
-                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-education'></span></div></div>");
-                    }
-                }
-            }
-
-
-            if (event.titleEventObiect == "Wizyta klienta") {
-
-                if (moment(event.end) - moment(event.start) < 2700000) {
-
-                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-
-                } else {
-
-                    if (moment(event.end) - moment() <= 1800000) {
-                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-
-                    } else {
-                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
-                    }
-                }
-
-            }
-
-
-            if (event.titleEventObiect == "Spotkanie") {
-
-                if (moment(event.end) - moment(event.start) < 2700000) {
-
-                    //  alert('maly element');
-                    eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
-                } else {
-
-                    if (moment(event.end) - moment() <= 1800000) {
-                        eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
-                    } else {
-                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-blackboard'></span></div></div>");
-
-                    }
-                }
-            }
+            eventElement.append("<div>" + event.titleEventObiect + "</div> <div style ='font-size :50px; position: realtive; margin-top :10px; margin-left: 10px'><span class='glyphicon glyphicon-user'></span></div>");
+                    
+                                      
+            
+            
+//            }
+//
+//            if (event.titleEventObiect == "Szkolenie") {
+//
+//
+//                if (moment(event.end) - moment(event.start) < 2700000) {
+//                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+//                } else {
+//
+//                    if (moment(event.end) - moment() <= 1800000) {
+//
+//                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+//                    } else {
+//                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-education'></span></div></div>");
+//                    }
+//                }
+//            }
+//
+//
+//            if (event.titleEventObiect == "Wizyta klienta") {
+//
+//                if (moment(event.end) - moment(event.start) < 2700000) {
+//
+//                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+//
+//                } else {
+//
+//                    if (moment(event.end) - moment() <= 1800000) {
+//                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
+//
+//                    } else {
+//                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
+//                    }
+//                }
+//
+//            }
+//
+//
+//            if (event.titleEventObiect == "Spotkanie") {
+//
+//                if (moment(event.end) - moment(event.start) < 2700000) {
+//
+//                    //  alert('maly element');
+//                    eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
+//                } else {
+//
+//                    if (moment(event.end) - moment() <= 1800000) {
+//                        eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
+//                    } else {
+//                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-blackboard'></span></div></div>");
+//
         },
-
         eventClick: function (calEvent, jsEvent, view) {
+
 
             // request send mail
             $.ajax({//typ połączenia na post
@@ -96,33 +104,43 @@ function createCalnedar(minTime, maxTime) {
                     message: calEvent.titleObiect
                 },
                 success: function (data, textStatus, jqXHR) {
-                    alert(data)
+                    $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
+                        animate: {
+                            enter: 'animated bounceInDown',
+                            exit: 'animated bounceOutUp'
+                        },
+                        offset: {
+                            x: 600,
+                            y: 400
+
+                        }, type: 'success'
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $.notify("Wiadomość nie wysłana .Skontaktuj sie z Krzysztofem Szczech", {
+
+                        offset: {
+                            x: 600,
+                            y: 400
+
+                        }, type: 'danger', delay: 0,
+
+                    });
                 }
+
             });
+//            message_data = "";
+//            $.ajax({
+//                type: "get", //typ połączenia na get
+//                url: "/getToken",
+//                dataType: 'json',
+//                success: function (data, textStatus, jqXHR) {
+//                    alert(data);
+//                }
+//            });
 
-            message_data = "";
+//            if (message_data === "")
 
-            $.ajax({
-                type: "get", //typ połączenia na get
-                url: "/getToken",
-                dataType: 'json',
-                success: function (data, textStatus, jqXHR) {
-                    alert(data);
-                }
-            });
-
-            if (message_data === "")
-                $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
-                    animate: {
-                        enter: 'animated bounceInDown',
-                        exit: 'animated bounceOutUp'
-                    },
-                    offset: {
-                        x: 600,
-                        y: 400
-
-                    },
-                });
 
 
         },
@@ -159,7 +177,7 @@ function compareTime(givenTime) {
 }
 var renderEvents = function () {
 
-    // get event from database
+// get event from database
     $.ajax({
         type: "GET", //typ połączenia na post
         url: "/dataFromRemoteSql",
@@ -168,7 +186,6 @@ var renderEvents = function () {
         success: function (json) {
 
             deleteEvent();
-
             for (var i = 0; i < json.length; i++) {
                 if (compareTime(json[i].timeEventStop) === false) {
 
@@ -202,7 +219,6 @@ var renderEvents = function () {
                     dow: [1, 2, 3, 4, 5], // Repeat monday and friday
                     mail: "Employee.APL@advantech.eu"
                 }]);
-
             $('#calendar').fullCalendar('addEventSource', [{
                     resourceId: 5,
                     titleEventObiect: "Pan kanapka",
@@ -211,7 +227,6 @@ var renderEvents = function () {
                     dow: [1, 2, 3, 4, 5], // Repeat monday and friday
                     mail: "Employee.APL@advantech.eu"
                 }]);
-
             $('#calendar').fullCalendar('addEventSource', [{
                     resourceId: 5,
                     titleEventObiect: "Pan pobutka",
@@ -220,10 +235,8 @@ var renderEvents = function () {
                     dow: [1, 2, 3, 4, 5], // Repeat monday and friday
                     mail: "Employee.APL@advantech.eu"
                 }]);
-
         }
     });
-
     $.ajax({
         type: "GET", //typ połączenia na post
         url: "/getToken/getCalendarFromEvent",
@@ -232,12 +245,7 @@ var renderEvents = function () {
         success: function (json) {
 
             deleteEvent();
-//
-//                console.log(start);
-//                console.log(end);
-
             resourceId = 0;
-
             for (i = 0; i < json.value.length; i++) {
                 for (j = 0; j < auditorium.length; j++) {
                     if (json.value[i].Location.DisplayName === auditorium[j]) {
@@ -245,18 +253,18 @@ var renderEvents = function () {
                         console.log(resourceId);
                         console.log(json.value[i].Location.DisplayName);
                         console.log(i + " " + j);
-
                         start = moment.parseZone(json.value[i].Start.DateTime).local().format();
                         start = moment().format(start).substring(11, 16);
                         end = moment.parseZone(json.value[i].End.DateTime).local().format();
                         end = moment().format(end).substring(11, 16);
-
+                        title = json.value[i].Subject.toString();
                         $('#calendar').fullCalendar('addEventSource', [{
                                 resourceId: resourceId,
-                                titleEventObiect: json.value[i],
+                                titleEventObiect: json.value[i].Subject + '<br>' + json.value[i].Organizer.EmailAddress.Name,
                                 start: start, // a start time (10am in this example)
                                 end: end, // an end time (6pm in this example)
-                                // Repeat monday and friday
+                                mail: json.value[i].Organizer.EmailAddress.Address,
+//                console.log(events.value[0].Organizer.EmailAddress.Name);
 
                             }]);
                         break;
@@ -270,6 +278,8 @@ var deleteEvent = function () {
     $('#calendar').fullCalendar('removeEvents');
 }
 
+var chceck_connet_internet = false;
+
 var functionToExecute = function () {
 
 //    // console.log(moment());
@@ -281,23 +291,37 @@ var functionToExecute = function () {
         url: "/getToken",
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
-            console.log(data);
+
+            if (chceck_connet_internet == false) {
+
+
+                $.notify("Sesja wygasła lub wystąpił błąd sieci. Skontaktuj sie z Krzysztofem Szczech", {
+
+                    offset: {
+                        x: 600,
+                        y: 400
+
+                    }, type: 'danger', delay: 0,
+
+                });
+                chceck_connet_internet = true;
+            }
+        }, error: function (jqXHR, textStatus, errorThrown) {
+
+            chceck_connet_internet = false;
+
         }
     });
-
-
     // console.log("from web site " + start + " " + stop);
 //    if (!moment().isBetween(start, stop))
 
     renderEvents();
-
     date = new Date();
     console.log(date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
     if (date.getHours() !== 0 && date.getMinutes() === 0 && date.getSeconds() <= 5) {
 
         if (date.getHours() === 6 && date.getMinutes() === 59 && date.getSeconds() <= 10)
             location.reload();
-
         $('#calendar').fullCalendar('destroy');
         if (formatDate('check') > 0 && formatDate('check') < 20) {
 
@@ -308,7 +332,7 @@ var functionToExecute = function () {
     }
     if (date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() <= 5) {
 
-        // end end event 
+// end end event 
         console.log('start function');
         $.ajax({
             type: "POST", //typ połączenia na post
@@ -319,19 +343,15 @@ var functionToExecute = function () {
 
 // init calendar 
 createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
-
 // init event
 renderEvents();
-
 // init token 
 $.ajax({
 
     type: "get", //typ połączenia na post
     url: "/getToken"
 });
-
 setInterval(functionToExecute, 5000);
-
 $(window).resize(function () {
     var calHeight = $(window).height() * 0.606;
     $('#calendar').fullCalendar('option', 'height', calHeight);

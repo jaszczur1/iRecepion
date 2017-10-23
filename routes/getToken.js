@@ -7,41 +7,38 @@ var getActualTime = require('../node_modules/moment'); //lib for format time
 var express = require('express');
 var router = express.Router();
 
+var token;
 var expiration;
 var refresh_token;
-var token;
-var bool = true;
 var token_refreh_pom;
-// czy wystpił bład
+var bool = true;
+// czy wystpił bład do wypisania na ekranie głownym
 var Verror = "ok";
-// czy wystapił bład po raz drugi
-//var VerrorBool = false;
+//ilość błędów
 var amoutErrors = 0;
 
 router.get('/', function (request, response, next) {
 
-    if (Verror !== "ok") {
-        //    response.send("podczas pracy wystapił błąd sieci lub brak sieci");
-
-        var json = JSON.stringify({
-            "message": "podczas pracy wystapił błąd sieci lub brak sieci"
-        });
-        response.json(json);
-        // amoutErrors = 0;
-
-    }
+    console.log('Request handler token  was called.');
     //get cookies from page
     if (bool) {
         token = request.cookies.token;
         expiration = new Date(parseFloat(request.cookies.token_expires));
         refresh_token = request.cookies.refresh_token;
         console.log("Get request all cookies :" + request.headers.cookie);
-        bool = false;
         console.log("work with this mail: " + request.cookies.email);
-
+        bool = false;
     }
 
-    console.log('Request handler \'mail\' was called.');
+    if (Verror !== "ok") {
+        //    response.send("podczas pracy wystapił błąd sieci lub brak sieci");
+
+        var json = JSON.stringify({
+            "message": "error"
+        });
+        response.json(json);
+        // amoutErrors = 0;
+    }
 
     getAccessToken(request, response, function (error, refershTokenPom) {
 
@@ -52,11 +49,12 @@ router.get('/', function (request, response, next) {
 
             if (amoutErrors > 50) {
                 Verror = error;
-            }
-            console.log("bład tokena do obsłuzenia");
-            refresh_token = refershTokenPom;
-        }
+            } else {
 
+                console.log("bład tokena do obsłuzenia");
+                refresh_token = refershTokenPom;
+            }
+        }
     });
 
     function getAccessToken(request, response, callback) {
@@ -95,25 +93,28 @@ router.get('/', function (request, response, next) {
                 }
             })
         } else {
-            console.log("bez odswierzania token");
-          
+            console.log("token aktualny");
+
         }
-         try {
-                 response.end();
-            } catch (e) {
-                
-            }
+        try {
+            response.end();
+        } catch (e) {
+
+        }
     }
-   
+
 });
 
 router.get('/mail', function (request, response, next) {
+
+    console.log('try send msg')
+
 
     var host = request.param('host');
     var message = request.param('message');
     var titleEventObiect = request.param('titleEventObiect');
 
-    console.log('uzywam tego tokena' + token);
+    console.log('uzywam tego token    ' + token);
 
     var newMsg = {
         Subject: titleEventObiect,
@@ -138,33 +139,35 @@ router.get('/mail', function (request, response, next) {
 
     outlook.mail.sendNewMessage({token: token, message: newMsg, user: userInfo},
             function (error, result) {
+
                 if (error) {
                     console.log('sendNewMessage returned an error: ' + error);
+
                     Verror = error;
-                    var json = JSON.stringify({
-                        "message": "mail nie wyslany"
-                    });
 
                     try {
-                        response.json(json);
+                        response.sendStatus(404);
 
                     } catch (e) {
                         console.log("nie mozna wysłąc ajax " + e);
                     }
 
                 } else if (result) {
-                    console.log(JSON.stringify(result, null, 2));
-                    var json = JSON.stringify({
+
+                    console.log(result);
+                    ///  console.log(JSON.stringify(result, null, 2));
+                    var json1 = JSON.stringify({
                         "message": "mail  wyslany"
                     });
                     Verror = "ok";
                     try {
-                        response.json(json);
+                        response.json(json1);
 
                     } catch (e) {
                         console.log("nie mozna wysłąc ajax " + e);
                     }
                 }
+
             });
 }
 );
@@ -177,9 +180,9 @@ router.get('/getCalendarFromEvent', function (request, response, next) {
     var startDateTime = getActualTime().format("YYYY-M-D");
     var endDateTime = getActualTime().add(1, 'day');
     endDateTime = getActualTime(endDateTime).format("YYYY-M-D");
-    
-    console.log("get event for day "+ startDateTime+" -"+endDateTime );
-    
+
+    console.log("get event for day " + startDateTime + " -" + endDateTime);
+
     var apiOptions = {
         token: token,
         // If none specified, the Primary calendar will be used
@@ -197,12 +200,11 @@ router.get('/getCalendarFromEvent', function (request, response, next) {
                 response.json(events);
                 console.log(events.value[0].Start);
                 console.log(events.value[0].End);
-                console.log(events.value[0].Location);
-//            console.log(events.value[0].End);
-            console.log(events.value[0].Organizer.EmailAddress.Address);
-            console.log(events.value[0].Organizer.EmailAddress.Name);
-//            
-//            console.log('/////////////////////////////////////////////////////');
+//                console.log(events.value[0].Location);
+//                console.log(events.value[0].Organizer.EmailAddress.Address);
+//                console.log(events.value[0].Organizer.EmailAddress.Name);
+//                console.log(events.value[0].Subject);
+//                console.log('/////////////////////////////////////////////////////');
 
             } catch (e) {
                 console.log("brak zdarzen w kalenarzu " + e)
