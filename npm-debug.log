@@ -9,7 +9,7 @@
 6 silly lifecycle fullCalndarOutlook@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle fullCalndarOutlook@0.0.0~start: fullCalndarOutlook@0.0.0
 8 verbose lifecycle fullCalndarOutlook@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle fullCalndarOutlook@0.0.0~start: PATH: /home/jaszczur/Documents/node-v6.11.3-linux-x64/lib/node_modules/npm/bin/node-gyp-bin:/home/jaszczur/NetBeansProjects/iReception/node_modules/.bin:/home/jaszczur/bin:/home/jaszczur/.local/bin:/opt/lampp/bin:/home/jaszczur/Documents/node-v6.11.3-linux-x64/bin:/home/jaszczur/Documents/jdk1.8.0_144/jre/bin:/home/jaszczur/Documents/jdk1.8.0_144/bin:/home/jaszczur/bin:/home/jaszczur/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+9 verbose lifecycle fullCalndarOutlook@0.0.0~start: PATH: /home/jaszczur/Documents/node-v6.11.3-linux-x64/lib/node_modules/npm/bin/node-gyp-bin:/home/jaszczur/NetBeansProjects/iReception/node_modules/.bin:/opt/lampp/bin:/home/jaszczur/Documents/node-v6.11.3-linux-x64/bin:/home/jaszczur/Documents/jdk1.8.0_144/jre/bin:/home/jaszczur/Documents/jdk1.8.0_144/bin:/home/jaszczur/bin:/home/jaszczur/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 10 verbose lifecycle fullCalndarOutlook@0.0.0~start: CWD: /home/jaszczur/NetBeansProjects/iReception
 11 silly lifecycle fullCalndarOutlook@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle fullCalndarOutlook@0.0.0~start: Returned: code: 1  signal: null

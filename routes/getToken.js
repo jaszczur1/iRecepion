@@ -143,14 +143,9 @@ router.get('/mail', function (request, response, next) {
                 if (error) {
                     console.log('sendNewMessage returned an error: ' + error);
 
-                    Verror = error;
+                    // Verror = error;
 
-                    try {
-                        response.sendStatus(404);
-
-                    } catch (e) {
-                        console.log("nie mozna wysłąc ajax " + e);
-                    }
+                    response.status(500).send();
 
                 } else if (result) {
 
@@ -160,14 +155,10 @@ router.get('/mail', function (request, response, next) {
                         "message": "mail  wyslany"
                     });
                     Verror = "ok";
-                    try {
-                        response.json(json1);
 
-                    } catch (e) {
-                        console.log("nie mozna wysłąc ajax " + e);
-                    }
+                    response.json(json1);
+
                 }
-
             });
 }
 );
@@ -194,6 +185,12 @@ router.get('/getCalendarFromEvent', function (request, response, next) {
     outlook.calendar.syncEvents(apiOptions, function (error, events) {
         if (error) {
             console.log('syncEvents returned an error:', error);
+
+
+
+            response.status(500).send();
+
+
         } else {
 
             try {

@@ -24,7 +24,9 @@ router.get('/', function (request, response, next) {
 
         } else {
             console.log('failed db');
-            response.end();
+            
+           
+             response.status(500).send("Not found.");
         }
     });
 });

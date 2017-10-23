@@ -116,10 +116,12 @@ function createCalnedar(minTime, maxTime) {
                             x: 600,
                             y: 400
 
-                        }, type: 'success'
+                        }, type: 'success',showProgressbar: true
                     });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    
+                 
                     $.notify("Wiadomość nie wysłana .Skontaktuj sie z Krzysztofem Szczech", {
 
                         offset: {
