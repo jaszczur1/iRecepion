@@ -107,6 +107,8 @@ function createCalnedar(minTime, maxTime) {
                     message: calEvent.titleObiect
                 },
                 success: function (data, textStatus, jqXHR) {
+                    
+                    alert('send');
                     $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
                         animate: {
                             enter: 'animated bounceInDown',
@@ -121,7 +123,7 @@ function createCalnedar(minTime, maxTime) {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     
-                 
+                    alert('not den')
                     $.notify("Wiadomość nie wysłana .Skontaktuj sie z Krzysztofem Szczech", {
 
                         offset: {
@@ -190,7 +192,7 @@ var renderEvents = function () {
 
         success: function (json) {
 
-            deleteEvent();
+            
             for (var i = 0; i < json.length; i++) {
                 if (compareTime(json[i].timeEventStop) === false) {
 
@@ -209,7 +211,6 @@ var renderEvents = function () {
                         titleObiect: json[i].titleEvent + "<br>" + json[i].full_name,
                         start: json[i].timeEventStart,
                         end: json[i].timeEventStop,
-                        color: color[json[i].idRoom - 1],
                         mail: json[i].mail,
                         titleEventObiect: json[i].type_meeting
 
