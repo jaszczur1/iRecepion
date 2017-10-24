@@ -2,7 +2,7 @@
 Użyte techniki:
 - javascipt jQuery
 - Node js express framework
-- Html kompilownay domsylnie w jade
+- Html kompilownay domyslnie w jade
 - wpraper outlook-js
 - FullCalendar - framework
 
