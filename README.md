@@ -3,7 +3,7 @@ Użyte techniki:
 - javascript jQuery 3.21
 - Node js, express framework
 - Html domyslnie w jade
-- wpraper outlook-js
+- wraper outlook-js
 - FullCalendar - framework
 
 Aplikacja działa od frontendu na przeglądarce w jQuery, oraz w backendzie na node js.
