@@ -1,11 +1,11 @@
 # iReception
 Użyte techniki:
-- javascipt jQuery
-- Node js express framework
-- Html kompilownay domyslnie w jade
+- javascript jQuery 3.21
+- Node js, express framework
+- Html domyslnie w jade
 - wpraper outlook-js
 - FullCalendar - framework
 
-Aplikacja dzialajca od frontendu na przegladarce w jQuery, oraz w backendzie na node js w frameworku express.
-Zadanie polega na rozsłyniu emaili to temu, podgrup w firmie za pomocą ekranu dotykowego w recepcji.
-Klinet klika na ekrenie event w kalendarzu i wysyla maila do grupy. Eventy dodawane sa w standardowym windowsowym outlook lub w aplikacji wewnerzej w fimie.
+Aplikacja dzialąjca od frontendu na przeglądarce w jQuery, oraz w backendzie na node js.
+Zadanie polega na rozsyłaniu emaili to temu, podgrup w firmie za pomocą ekranu dotykowego w recepcji.
+Klinet klika na ekranie event w postaci pola w kalendarzu i wysyla maila do grupy(ajax). Użytkownik dostaje także odpowiedz w postaci alertu czy widomość została wysłana. Backed zajmuje się autoryzacją oraz odświerzaniem token-key. Eventy dodawane sa w standardowym windowsowym outlook lub w aplikacji wewnętrznej w fimie.
