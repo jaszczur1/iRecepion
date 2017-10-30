@@ -19,28 +19,46 @@ function createCalnedar(minTime, maxTime) {
         header: {left: 'title', right: ''},
         firstDay: 1,
         eventRender: function (event, eventElement) {
-            
-       
 
 
-            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka" || event.titleEventObiect == "Pan pobutka") {
+//          /  alert(event.end);
+//            
+//            moment().isSameOrAfter(moment().add(1, 'day')); // false
 
-                $(eventElement).css({'font-size':'17px'});
+//                moment('2010-10-20').isSame('2010-10-20'); 
+//              if( alert('trur');
+
+            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka" || event.titleEventObiect == "Pan pobudka") {
+
+                $(eventElement).css({'font-size': '17px'});
                 eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-cutlery'></span></div></div>");
-            }
-            
-            else{
+            } else {
+                
+                if (moment(event.end) - moment(event.start) <= 1800000 && moment() - moment(event.end) <= 1800000) {
                  
-            $(eventElement).css({'font-size':'25px', 'display': 'flex'});
+                $(eventElement).css({'font-size': '17px', 'display':'flex'});
 
 //            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
 
-            eventElement.append("<div>" + event.titleEventObiect + "</div> <div style ='font-size :50px; position: realtive; margin-top :10px; margin-left: 10px'><span class='glyphicon glyphicon-user'></span></div>");
-                 
+                 eventElement.append("<div><div>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
+
             }
-                                      
             
-            
+                else{
+                    
+                $(eventElement).css({'font-size': '25px', 'display': 'flex'});
+
+//            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
+
+                eventElement.append("<div>" + event.titleEventObiect + "</div> <div style ='font-size :50px; position: realtive; margin-top :10px; margin-left: 10px'><span class='glyphicon glyphicon-user'></span></div>");
+     
+                    
+                }
+
+            }
+
+
+
 //            }
 //
 //            if (event.titleEventObiect == "Szkolenie") {
@@ -107,7 +125,7 @@ function createCalnedar(minTime, maxTime) {
                     message: calEvent.titleObiect
                 },
                 success: function (data, textStatus, jqXHR) {
-                    
+
                     alert('send');
                     $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
                         animate: {
@@ -118,11 +136,11 @@ function createCalnedar(minTime, maxTime) {
                             x: 600,
                             y: 400
 
-                        }, type: 'success',showProgressbar: true
+                        }, type: 'success', showProgressbar: true
                     });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    
+
                     alert('not den')
                     $.notify("Wiadomość nie wysłana .Skontaktuj sie z Krzysztofem Szczech", {
 
@@ -192,7 +210,6 @@ var renderEvents = function () {
 
         success: function (json) {
 
-            
             for (var i = 0; i < json.length; i++) {
                 if (compareTime(json[i].timeEventStop) === false) {
 
@@ -213,24 +230,20 @@ var renderEvents = function () {
                         end: json[i].timeEventStop,
                         mail: json[i].mail,
                         titleEventObiect: json[i].type_meeting
-
                     }]);
             }
         }
-        
     });
-    
-    
-    
+
     $.ajax({
-        type: "GET", //typ połączenia na post
+        type: "GET", //typ połączenia na GET
         url: "/getToken/getCalendarFromEvent",
         dataType: 'json', //ustawiamy typ danych na json
 
         success: function (json) {
 
             deleteEvent();
-            
+
             $('#calendar').fullCalendar('addEventSource', [{
                     resourceId: 5,
                     titleEventObiect: "Rajskie smaki",
@@ -249,14 +262,14 @@ var renderEvents = function () {
                 }]);
             $('#calendar').fullCalendar('addEventSource', [{
                     resourceId: 5,
-                    titleEventObiect: "Pan pobutka",
+                    titleEventObiect: "Pan pobudka",
                     start: '10:30', // a start time (10am in this example)
                     end: '11:00', // an end time (6pm in this example)
                     dow: [1, 2, 3, 4, 5], // Repeat monday and friday
                     mail: "Employee.APL@advantech.eu"
                 }]);
-            
-            
+
+
             resourceId = 0;
             for (i = 0; i < json.value.length; i++) {
                 for (j = 0; j < auditorium.length; j++) {
@@ -348,25 +361,25 @@ var functionToExecute = function () {
 
 // init app
 
-$(document).ready(function(){
-   
-    // init calendar 
-createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
-// init event
-renderEvents();
-// init token 
-$.ajax({
+$(document).ready(function () {
 
-    type: "get", //typ połączenia na post
-    url: "/getToken"
-});
-setInterval(functionToExecute, 5000);
-$(window).resize(function () {
+    // init calendar 
+    createCalnedar(formatDate('timeCreateStart'), formatDate('timeCreateStop'));
+// init event
+    renderEvents();
+// init token 
+    $.ajax({
+
+        type: "get", //typ połączenia na post
+        url: "/getToken"
+    });
+    setInterval(functionToExecute, 5000);
+    $(window).resize(function () {
+        var calHeight = $(window).height() * 0.606;
+        $('#calendar').fullCalendar('option', 'height', calHeight);
+    });
     var calHeight = $(window).height() * 0.606;
     $('#calendar').fullCalendar('option', 'height', calHeight);
-});
-var calHeight = $(window).height() * 0.606;
-$('#calendar').fullCalendar('option', 'height', calHeight);
 
 })
 

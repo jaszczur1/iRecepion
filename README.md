@@ -2,9 +2,10 @@
 Użyte techniki:
 - javascript jQuery 3.21
 - Node js, express framework
-- Html domyslnie w jade
+- Html kompilowany w jade
 - wraper outlook-js
-- FullCalendar - framework
+- FullCalendar jQuery - framework
+- moment js
 
 Aplikacja działa od frontendu na przeglądarce w jQuery, oraz w backendzie na node js.
 Zadanie polega na rozsyłaniu emaili to temu, podgrup w firmie za pomocą ekranu dotykowego w recepcji.
