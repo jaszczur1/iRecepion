@@ -33,26 +33,24 @@ function createCalnedar(minTime, maxTime) {
                 $(eventElement).css({'font-size': '17px'});
                 eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-cutlery'></span></div></div>");
             } else {
-                
-                if (moment(event.end) - moment(event.start) <= 1800000 && moment() - moment(event.end) <= 1800000) {
-                 
-                $(eventElement).css({'font-size': '17px', 'display':'flex'});
+
+                if (moment(event.end) - moment(event.start) <= 1800000 || moment() - moment(event.end) <= 1800000) {
+
+                    $(eventElement).css({'font-size': '17px', 'display': 'flex'});
 
 //            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
 
-                 eventElement.append("<div><div>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
+                    eventElement.append("<div><div>" + event.titleEventObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
 
-            }
-            
-                else{
-                    
-                $(eventElement).css({'font-size': '25px', 'display': 'flex'});
+                } else {
+
+                    $(eventElement).css({'font-size': '25px', 'display': 'flex'});
 
 //            if (event.titleEventObiect == "Rajskie smaki" || event.titleEventObiect == "Pan kanapka") {
 
-                eventElement.append("<div>" + event.titleEventObiect + "</div> <div style ='font-size :50px; position: realtive; margin-top :10px; margin-left: 10px'><span class='glyphicon glyphicon-user'></span></div>");
-     
-                    
+                    eventElement.append("<div>" + event.titleEventObiect + "</div> <div style ='font-size :50px; position: realtive; margin-top :10px; margin-left: 10px'><span class='glyphicon glyphicon-user'></span></div>");
+
+
                 }
 
             }
@@ -283,13 +281,13 @@ var renderEvents = function () {
                         end = moment.parseZone(json.value[i].End.DateTime).local().format();
                         end = moment().format(end).substring(11, 16);
                         title = json.value[i].Subject.toString();
+                        
                         $('#calendar').fullCalendar('addEventSource', [{
                                 resourceId: resourceId,
                                 titleEventObiect: json.value[i].Subject + '<br>' + json.value[i].Organizer.EmailAddress.Name,
                                 start: start, // a start time (10am in this example)
                                 end: end, // an end time (6pm in this example)
                                 mail: json.value[i].Organizer.EmailAddress.Address,
-//                console.log(events.value[0].Organizer.EmailAddress.Name);
 
                             }]);
                         break;
