@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
 var mysql = require('mysql');
-var moment = require('moment');
 
 var options = {
     host: '172.21.56.101',

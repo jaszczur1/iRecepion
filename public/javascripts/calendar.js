@@ -54,60 +54,6 @@ function createCalnedar(minTime, maxTime) {
                 }
 
             }
-
-
-
-//            }
-//
-//            if (event.titleEventObiect == "Szkolenie") {
-//
-//
-//                if (moment(event.end) - moment(event.start) < 2700000) {
-//                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-//                } else {
-//
-//                    if (moment(event.end) - moment() <= 1800000) {
-//
-//                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-//                    } else {
-//                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-education'></span></div></div>");
-//                    }
-//                }
-//            }
-//
-//
-//            if (event.titleEventObiect == "Wizyta klienta") {
-//
-//                if (moment(event.end) - moment(event.start) < 2700000) {
-//
-//                    eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-//
-//                } else {
-//
-//                    if (moment(event.end) - moment() <= 1800000) {
-//                        eventElement.append("<div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + "</div>");
-//
-//                    } else {
-//                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-user'></span></div></div>");
-//                    }
-//                }
-//
-//            }
-//
-//
-//            if (event.titleEventObiect == "Spotkanie") {
-//
-//                if (moment(event.end) - moment(event.start) < 2700000) {
-//
-//                    //  alert('maly element');
-//                    eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
-//                } else {
-//
-//                    if (moment(event.end) - moment() <= 1800000) {
-//                        eventElement.append('<div class="icons"><span class="glyphicon glyphicon-cutlery"></span></div>');
-//                    } else {
-//                        eventElement.append("<div><div class='text' style= 'float: left'; margin-right:20px;>" + event.titleEventObiect + '<br>' + event.titleObiect + "</div><div class='icons'><span class='glyphicon glyphicon-blackboard'></span></div></div>");
-//
         },
         eventClick: function (calEvent, jsEvent, view) {
 
@@ -124,7 +70,6 @@ function createCalnedar(minTime, maxTime) {
                 },
                 success: function (data, textStatus, jqXHR) {
 
-                    alert('send');
                     $.notify("Powiadomienie  zostało wysłane czekaj w recepcji", {
                         animate: {
                             enter: 'animated bounceInDown',
@@ -139,7 +84,6 @@ function createCalnedar(minTime, maxTime) {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
 
-                    alert('not den')
                     $.notify("Wiadomość nie wysłana .Skontaktuj sie z Krzysztofem Szczech", {
 
                         offset: {
@@ -152,20 +96,6 @@ function createCalnedar(minTime, maxTime) {
                 }
 
             });
-//            message_data = "";
-//            $.ajax({
-//                type: "get", //typ połączenia na get
-//                url: "/getToken",
-//                dataType: 'json',
-//                success: function (data, textStatus, jqXHR) {
-//                    alert(data);
-//                }
-//            });
-
-//            if (message_data === "")
-
-
-
         },
         resources: [
             {id: '1', title: 'Orange ground floor', eventColor: 'orange'},
@@ -200,10 +130,12 @@ function compareTime(givenTime) {
 }
 var renderEvents = function () {
 
+    eventContainer = [];
+
 // get event from database
     $.ajax({
         type: "GET", //typ połączenia na post
-        url: "/dataFromRemoteSql",
+        url: "/javascripts/newjson.json",
         dataType: 'json', //ustawiamy typ danych na json
 
         success: function (json) {
@@ -212,23 +144,32 @@ var renderEvents = function () {
                 if (compareTime(json[i].timeEventStop) === false) {
 
                     $.ajax({
-                        type: "post", //typ połączenia na post
+                        type: "POST", //typ połączenia na post
                         url: "/dataFromRemoteSql/statusEnd",
-                        dataType: 'json',
                         data: {
                             idEvent: json[i].idEvent
                         }
                     });
                 }
-
-                $('#calendar').fullCalendar('addEventSource', [{
-                        resourceId: json[i].idRoom,
-                        titleObiect: json[i].titleEvent + "<br>" + json[i].full_name,
-                        start: json[i].timeEventStart,
-                        end: json[i].timeEventStop,
-                        mail: json[i].mail,
-                        titleEventObiect: json[i].type_meeting
-                    }]);
+                eventContainer.push(json[i]);
+                
+                // na lokalnej bazie
+                
+//                 eventContainer.push({
+//                            resourceId: json[i].idRoom,
+//                            titleEventObiect: json[i].titleEvent + "<br>" + json[i].full_name,
+//                            start: json[i].timeEventStart,
+//                            end: json[i].timeEventStop,
+//                            mail: json[i].mail
+//                        });
+                
+//                $('#calendar').fullCalendar('addEventSource', [{
+//                        resourceId: json[i].idRoom,
+//                        titleEventObiect: json[i].titleEvent + "<br>" + json[i].full_name,
+//                        start: json[i].timeEventStart,
+//                        end: json[i].timeEventStop,
+//                        mail: json[i].mail
+//                    }]);
             }
         }
     });
@@ -267,7 +208,6 @@ var renderEvents = function () {
                     mail: "Employee.APL@advantech.eu"
                 }]);
 
-
             resourceId = 0;
             for (i = 0; i < json.value.length; i++) {
                 for (j = 0; j < auditorium.length; j++) {
@@ -281,19 +221,30 @@ var renderEvents = function () {
                         end = moment.parseZone(json.value[i].End.DateTime).local().format();
                         end = moment().format(end).substring(11, 16);
                         title = json.value[i].Subject.toString();
-                        
-                        $('#calendar').fullCalendar('addEventSource', [{
-                                resourceId: resourceId,
-                                titleEventObiect: json.value[i].Subject + '<br>' + json.value[i].Organizer.EmailAddress.Name,
-                                start: start, // a start time (10am in this example)
-                                end: end, // an end time (6pm in this example)
-                                mail: json.value[i].Organizer.EmailAddress.Address,
 
-                            }]);
+                        eventContainer.push({
+                            resourceId: j + 1,
+                            titleEventObiect: json.value[i].Subject + '<br>' + json.value[i].Organizer.EmailAddress.Name,
+                            start: start,
+                            end: end,
+                            mail: json.value[i].Organizer.EmailAddress.Address
+                        });
+
                         break;
                     }
                 }
             }
+            for (i = 0; i < eventContainer.length; i++) {
+                $('#calendar').fullCalendar('addEventSource', [{
+                        resourceId: eventContainer[i].resourceId,
+                        titleEventObiect: eventContainer[i].titleEventObiect,
+                        start: eventContainer[i].start, // a start time (10am in this example)
+                        end: eventContainer[i].end, // an end time (6pm in this example)
+                        mail: eventContainer[i].mail
+
+                    }]);
+            }
+//            alert(eventContainer.length);
         }});
 }
 
